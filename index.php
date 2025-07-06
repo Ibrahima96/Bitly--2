@@ -2,31 +2,47 @@
 
 // seconde partie 2
 
+// if (!empty($_GET['q'])) {
+// 	// je le metes sur une variable
+// 	$raccourcie = htmlspecialchars($_GET['q']);
+// 	// mais est-ce que sa exist ?
+// 	require_once './src/connexion.php';
+// 	$requete = $pdo->prepare("SELECT COUNT(*) AS nombre FROM links WHERE  short = ?");
+// 	$requete->execute([$raccourcie]);
+
+// 	while ($result = $requete->fetch()) {
+// 		if ($result['nombre'] != 1) {
+// 			header('Location: /?error=true&message=Adresse+url+non+reconnue');
+// 			exit();
+// 		}
+// 	}
+
+// 	//Redirection car tout va bien 
+// 	$requete = $pdo->prepare("SELECT * FROM links WHERE  short = ?");
+// 	$requete->execute([$raccourcie]);
+
+// 	while ($results = $requete->fetch(PDO::FETCH_OBJ)) {
+// 		header("Location:$results->url");
+// 		exit();
+// 	}
+// }
+
 if (!empty($_GET['q'])) {
-	// je le metes sur une variable
 	$raccourcie = htmlspecialchars($_GET['q']);
-	// mais est-ce que sa exist ?
 	require_once './src/connexion.php';
-	$requete = $pdo->prepare("SELECT COUNT(*) AS nombre FROM links WHERE  short = ?");
+
+	$requete = $pdo->prepare("SELECT url FROM links WHERE short = ?");
 	$requete->execute([$raccourcie]);
+	$result = $requete->fetch(PDO::FETCH_OBJ);
 
-	while ($result = $requete->fetch()) {
-		if ($result['nombre'] != 1) {
-			header('Location: /?error=true&message=Adresse+url+non+reconnue');
-			exit();
-		}
-	}
-
-	//Redirection car tout va bien 
-	$requete = $pdo->prepare("SELECT * FROM links WHERE  short = ?");
-	$requete->execute([$raccourcie]);
-
-	while ($results = $requete->fetch(PDO::FETCH_OBJ)) {
-		header("Location:$results->url");
+	if (!$result) {
+		header('Location: /?error=true&message=Adresse+url+non+reconnue');
 		exit();
 	}
-}
 
+	header("Location: {$result->url}");
+	exit();
+}
 
 //premier partie 1
 if (!empty($_POST['url'])) {
