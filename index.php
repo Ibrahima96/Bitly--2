@@ -1,5 +1,4 @@
 <?php
-
 // seconde partie 2
 
 // if (!empty($_GET['q'])) {
@@ -26,6 +25,7 @@
 // 		exit();
 // 	}
 // }
+
 
 if (!empty($_GET['q'])) {
 	$raccourcie = htmlspecialchars($_GET['q']);
